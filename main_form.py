@@ -1,34 +1,38 @@
-from flask import Flask
-from wtforms.widgets import TableWidget
-from wtforms import Form, StringField
+from flask import Flask, render_template
+from wtforms.widgets import SubmitInput
+from calendar import HTMLCalendar
+from datetime import datetime
+
+# App config.
+DEBUG = True
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config['SECRET_KEY'] = 'NotTellAnyone'
 
 
-class MyForm(Form):
-    first_name = StringField('First Name')
-    last_name = StringField('Last Name')
+class Calendar(HTMLCalendar):
+    _instance = None
+    today_Day = datetime.now().day
+    today_Month = datetime.now().month
+    today_Year = datetime.now().year
+    turn_down = SubmitInput()
+    turn_up = SubmitInput()
+
+    @staticmethod
+    def inst():
+        if Calendar._instance is None:
+            Calendar._instance = Calendar()
+        return Calendar._instance
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])  # CSS не работает, надо разобраться!
 def hello_world():
-    return 'Hello World'
-
-
-@app.route('/hello')
-def hello():
-    return 'Hello'
-
-
-@app.route('/projects/')
-def projects():
-    return 'The project page'
-
-
-@app.route('/about')
-def about():
-    return 'The about page'
+    Calendar.inst()
+    with open('templates/Calendar.html', 'w') as g:
+        g.write('<link rel="stylesheet" href="CalendarStyle.css" type="text/css"/>\n<title>Web-Diary</title>\n'
+                + Calendar.inst().formatmonth(Calendar.today_Year, Calendar.today_Month))
+    return render_template('Calendar.html')
 
 
 if __name__ == '__main__':
-    F = MyForm()
-    app.run(debug=True)
+    app.run()

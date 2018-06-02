@@ -1,0 +1,20 @@
+table
+{
+    border-spacing: 4px;
+    border-collapse: collapse;
+}
+
+th .month
+{
+	# как задать так чтобы заголовок занимал только 4 ячейки?
+}
+
+td, th
+{
+	padding: 3px;
+}
+
+th, td, table
+{
+	border: 2px solid #69c;
+}
