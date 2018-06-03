@@ -4,9 +4,14 @@ table
     border-collapse: collapse;
 }
 
-th .month
+td
 {
-	# как задать так чтобы заголовок занимал только 4 ячейки?
+	text-align: center;
+}
+
+th .mon:hover::after
+{
+    content: attr(class, string, "Понедельник");
 }
 
 td, th
@@ -17,4 +22,11 @@ td, th
 th, td, table
 {
 	border: 2px solid #69c;
+}
+
+button
+{
+    width: 30px;
+    height: 30px;
+    font-size: 23px;
 }

@@ -24,14 +24,33 @@ class Calendar(HTMLCalendar):
             Calendar._instance = Calendar()
         return Calendar._instance
 
+    @staticmethod
+    @app.route('/up/', methods=['GET', 'POST'])
+    def up():
+        if Calendar._instance.today_Month == 12:
+            Calendar._instance.today_Month = 1
+            Calendar._instance.today_Year += 1
+        else:
+            Calendar._instance.today_Month += 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
+
+    @staticmethod
+    @app.route('/down/', methods=['GET', 'POST'])
+    def down():
+        if Calendar._instance.today_Month == 1:
+            Calendar._instance.today_Month = 12
+            Calendar._instance.today_Year -= 1
+        else:
+            Calendar._instance.today_Month -= 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
+
+# <link rel="stylesheet" href="CalendarStyle.css" type="text/css"> - так почему-то не работает
+
 
 @app.route('/', methods=['GET', 'POST'])  # CSS не работает, надо разобраться!
 def hello_world():
     Calendar.inst()
-    with open('templates/Calendar.html', 'w') as g:
-        g.write('<link rel="stylesheet" href="CalendarStyle.css" type="text/css"/>\n<title>Web-Diary</title>\n'
-                + Calendar.inst().formatmonth(Calendar.today_Year, Calendar.today_Month))
-    return render_template('Calendar.html')
+    return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
 
 
 if __name__ == '__main__':

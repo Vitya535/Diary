@@ -1,11 +1,55 @@
-<link rel="stylesheet" href="CalendarStyle.css" type="text/css"/>
+<!DOCTYPE html>
+<html>
+<head>
 <title>Web-Diary</title>
-<table border="0" cellpadding="0" cellspacing="0" class="month">
-<tr><th colspan="7" class="month">June 2018</th></tr>
-<tr><th class="mon">Mon</th><th class="tue">Tue</th><th class="wed">Wed</th><th class="thu">Thu</th><th class="fri">Fri</th><th class="sat">Sat</th><th class="sun">Sun</th></tr>
-<tr><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td><td class="noday">&nbsp;</td><td class="fri">1</td><td class="sat">2</td><td class="sun">3</td></tr>
-<tr><td class="mon">4</td><td class="tue">5</td><td class="wed">6</td><td class="thu">7</td><td class="fri">8</td><td class="sat">9</td><td class="sun">10</td></tr>
-<tr><td class="mon">11</td><td class="tue">12</td><td class="wed">13</td><td class="thu">14</td><td class="fri">15</td><td class="sat">16</td><td class="sun">17</td></tr>
-<tr><td class="mon">18</td><td class="tue">19</td><td class="wed">20</td><td class="thu">21</td><td class="fri">22</td><td class="sat">23</td><td class="sun">24</td></tr>
-<tr><td class="mon">25</td><td class="tue">26</td><td class="wed">27</td><td class="thu">28</td><td class="fri">29</td><td class="sat">30</td><td class="noday">&nbsp;</td></tr>
-</table>
+    <style type="text/css"> - вот так CSS работает, но с линком не выходит
+table
+{
+    border-spacing: 4px;
+    border-collapse: collapse;
+}
+
+td
+{
+	text-align: center;
+}
+
+th .mon:hover::after
+{
+    content: attr(class, string, "Понедельник");
+}
+
+td, th
+{
+	padding: 3px;
+}
+
+th, td, table
+{
+	border: 2px solid #69c;
+}
+
+button
+{
+    width: 30px;
+    height: 30px;
+    font-size: 23px;
+}
+</style>
+</head>
+<body>
+<form action="/down/" method="post">
+<button title="Предыдущий месяц" value="<">
+
+    {{Down|safe}}
+</button>
+</form>
+<form action="/up/" method="post">
+<button title="Следующий месяц" value=">">
+
+    {{Up|safe}}
+</button>
+</form>
+{{calendar.formatmonth(calendar.today_Year, calendar.today_Month)|safe}}
+</body>
+</html>
