@@ -1,5 +1,4 @@
 from flask import Flask, render_template
-from wtforms.widgets import SubmitInput
 from calendar import HTMLCalendar
 from datetime import datetime
 
@@ -12,11 +11,9 @@ app.config['SECRET_KEY'] = 'NotTellAnyone'
 
 class Calendar(HTMLCalendar):
     _instance = None
-    today_Day = datetime.now().day
-    today_Month = datetime.now().month
-    today_Year = datetime.now().year
-    turn_down = SubmitInput()
-    turn_up = SubmitInput()
+    today_Day, Day = datetime.now().day, datetime.now().day
+    today_Month, Month = datetime.now().month, datetime.now().month
+    today_Year, Year = datetime.now().year, datetime.now().year
 
     @staticmethod
     def inst():
@@ -25,33 +22,59 @@ class Calendar(HTMLCalendar):
         return Calendar._instance
 
     @staticmethod
-    @app.route('/up/', methods=['GET', 'POST'])
-    def up():
-        if Calendar._instance.today_Month == 12:
-            Calendar._instance.today_Month = 1
-            Calendar._instance.today_Year += 1
+    @app.route('/up_month/', methods=['POST'])
+    def up_month():
+        if Calendar._instance.Month == 12:
+            Calendar._instance.Month = 1
+            Calendar._instance.Year += 1
         else:
-            Calendar._instance.today_Month += 1
-        return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
+            Calendar._instance.Month += 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), IsWeek=False)
 
     @staticmethod
-    @app.route('/down/', methods=['GET', 'POST'])
-    def down():
-        if Calendar._instance.today_Month == 1:
-            Calendar._instance.today_Month = 12
-            Calendar._instance.today_Year -= 1
+    @app.route('/down_month/', methods=['POST'])
+    def down_month():
+        if Calendar._instance.Month == 1:
+            Calendar._instance.Month = 12
+            Calendar._instance.Year -= 1
         else:
-            Calendar._instance.today_Month -= 1
-        return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
+            Calendar._instance.Month -= 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), IsWeek=False)
 
-# <link rel="stylesheet" href="CalendarStyle.css" type="text/css"> - так почему-то не работает
+    @staticmethod
+    @app.route('/up_week/', methods=['POST'])
+    def up_week():
+        if Calendar._instance.Month == 12:
+            Calendar._instance.Month = 1
+            Calendar._instance.Year += 1
+        else:
+            Calendar._instance.Month += 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), IsWeek=False)
+
+    @staticmethod
+    @app.route('/down_week/', methods=['POST'])
+    def down_week():
+        if Calendar._instance.Month == 1:
+            Calendar._instance.Month = 12
+            Calendar._instance.Year -= 1
+        else:
+            Calendar._instance.Month -= 1
+        return render_template('Calendar.html', calendar=Calendar.inst(), IsToday=False)
+
+    @staticmethod
+    @app.route('/', methods=['POST'])
+    def show_today():
+        return render_template('Calendar.html', calendar=Calendar.inst(), IsToday=True)
+
+# все хорошо конечно, но мне не нравится, что при листании календаря вся страница перезагружается
 
 
-@app.route('/', methods=['GET', 'POST'])  # CSS не работает, надо разобраться!
-def hello_world():
-    Calendar.inst()
-    return render_template('Calendar.html', calendar=Calendar.inst(), Up=Calendar.turn_up, Down=Calendar.turn_down)
+@app.route('/', methods=['GET', 'POST'])
+def show_diary():
+    return render_template('Calendar.html', calendar=Calendar.inst(), IsToday=False)
 
 
 if __name__ == '__main__':
+    Calendar.inst()
+    print(datetime.now())
     app.run()

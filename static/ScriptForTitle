@@ -1,0 +1,9 @@
+$(document).ready(function(){
+    $('th.mon').attr('title', 'Понедельник');
+    $('th.tue').attr('title', 'Вторник');
+    $('th.wed').attr('title', 'Среда');
+    $('th.thu').attr('title', 'Четверг');
+    $('th.fri').attr('title', 'Пятница');
+    $('th.sat').attr('title', 'Суббота');
+    $('th.sun').attr('title', 'Воскресенье');
+});

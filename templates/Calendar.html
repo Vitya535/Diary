@@ -2,54 +2,28 @@
 <html>
 <head>
 <title>Web-Diary</title>
-    <style type="text/css"> - вот так CSS работает, но с линком не выходит
-table
-{
-    border-spacing: 4px;
-    border-collapse: collapse;
-}
-
-td
-{
-	text-align: center;
-}
-
-th .mon:hover::after
-{
-    content: attr(class, string, "Понедельник");
-}
-
-td, th
-{
-	padding: 3px;
-}
-
-th, td, table
-{
-	border: 2px solid #69c;
-}
-
-button
-{
-    width: 30px;
-    height: 30px;
-    font-size: 23px;
-}
-</style>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CalendarStyle.css')}}"/>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery-3.3.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='ScriptForTitle')}}"></script>
 </head>
 <body>
-<form action="/down/" method="post">
-<button title="Предыдущий месяц" value="<">
-
-    {{Down|safe}}
-</button>
+<img src="{{url_for('static', filename='images/img-calendar.jpg')}}">
+<h1>Календарь</h1>
+<form method="post" class="for_weeks">
+    <button id="today" title="Предыдущий месяц" formaction="{{url_for('show_today')}}">Сегодня</button>
+    <button id="arrow_left_week" title="Предыдущая неделя" formaction="{{url_for('down_week')}}"><</button>
+    <button id="arrow_right_week" title="Следующая неделя" formaction="{{url_for('up_week')}}">></button>
 </form>
-<form action="/up/" method="post">
-<button title="Следующий месяц" value=">">
-
-    {{Up|safe}}
-</button>
+<div>
+<form method="post">
+    <button title="Предыдущий месяц" formaction="{{url_for('down_month')}}"><</button>
+    <button title="Следующий месяц" formaction="{{url_for('up_month')}}">></button>
 </form>
-{{calendar.formatmonth(calendar.today_Year, calendar.today_Month)|safe}}
+    {% if IsToday %}
+        {{calendar.formatmonth(calendar.today_Year, calendar.today_Month)|safe}}
+    {% else %}
+        {{calendar.formatmonth(calendar.Year, calendar.Month)|safe}}
+    {% endif %}
+    </div>
 </body>
 </html>
