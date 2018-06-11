@@ -33,14 +33,14 @@ button
     height: 30px;
     font-size: 20px;
     position: absolute;
-    right: 50px;
+    right: 100px;
     top: 25px;
 }
 
 #arrow_left_week
 {
     position: absolute;
-    right: 15px;
+    right: 65px;
     top: 25px;
 }
 
@@ -48,7 +48,15 @@ button
 {
     position: relative;
     top: 25px;
-    left: 20px;
+    left: 95px;
+}
+
+b
+{
+    position: relative;
+    top: 25px;
+    left: 105px;
+    font-size: 25px;
 }
 
 h1
@@ -76,4 +84,9 @@ div
     position: absolute;
     left: 450px;
     top: 23px;
+}
+
+td:hover
+{
+    background: #78a2b7;
 }

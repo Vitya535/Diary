@@ -1,4 +1,5 @@
-$(document).ready(function(){
+$(document).ready(function()
+{
     $('th.mon').attr('title', 'Понедельник');
     $('th.tue').attr('title', 'Вторник');
     $('th.wed').attr('title', 'Среда');
