@@ -22,6 +22,12 @@
                             if (rows.eq(index).text() != {{calendar.today_Day}})
                                     rows.eq(index).css('background', '#78a2b7');
             });
+
+            $('.month > tbody > tr > td').click(function()
+            {
+                if ($(this).text().match(/^[-\+]?\d+/) !== null)
+                    $(this).addClass('active').parents('.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
+            });
         });
     </script>
 </head>

@@ -90,3 +90,8 @@ td:hover
 {
     background: #78a2b7;
 }
+
+.month > tbody > tr > td.active
+{
+    background: #78a2b7;
+}

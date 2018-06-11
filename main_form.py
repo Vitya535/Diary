@@ -23,6 +23,13 @@ class Calendar(HTMLCalendar):
     this_week = today_Day // 5
 
     @staticmethod
+    def day_clicked():
+        Calendar.week_Year = Calendar.Year
+        Calendar.week_Month = Calendar.Month
+        Calendar.get_last_type_day_in_month()
+        Calendar.get_first_type_day_in_month()
+
+    @staticmethod
     def get_first_type_day_in_month():
         buf = Calendar._instance.monthdatescalendar(Calendar.Year, Calendar.Month)
         for i in range(len(buf)):
