@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Web-Diary</title>
+    <link rel="icon" href="{{url_for('static', filename='images/img-calendar.ico')}}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CalendarStyle.css')}}"/>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery-3.3.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='ScriptForTitle')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            var rows = $('table.month').find('td');
+            $("#what_show :contains('{{buf_for_select}}')").attr('selected', 'selected');
+            $.each(rows, function(index, value)
+            {
+                if ({{calendar.week_Month}} == {{calendar.Month}})
+                    if ({{calendar.week_Year}} == {{calendar.Year}})
+                        if (rows.eq(index).text() == {{calendar.Day}})
+                            rows.eq(index).css('background', '#78a2b7');
+
+                if ({{calendar.today_Month}} == {{calendar.Month}})
+                    if ({{calendar.today_Year}} == {{calendar.Year}})
+                        if (rows.eq(index).text() == {{calendar.today_Day}})
+                            rows.eq(index).css('background', 'green');
+            });
+
+            $('#what_show').change(function()
+            {
+                $('table.show').empty();
+                if ($('#what_show option:selected').text() == 'День')
+                {
+                    $('#arrow_left').attr('title', 'Предыдущий день');
+                    $('#arrow_right').attr('title', 'Следующий день');
+                    $('#arrow_left').attr('formaction', '{{url_for('down_day')}}');
+                    $('#arrow_right').attr('formaction', '{{url_for('up_day')}}');
+                    $('table.show').html('<thead><tr class="scrolling_table"><th class="empty"></th>\
+                    <th class="header">{{calendar.Day_format}}<br>{{calendar.today_Day}}</th></thead>\
+                    <tbody class="scrolling_table">\
+                    <tr class="scrolling_table"><td class="empty">0:00-1:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">1:00-2:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">2:00-3:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">3:00-4:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">4:00-5:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">5:00-6:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">6:00-7:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">7:00-8:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">8:00-9:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">9:00-10:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">10:00-11:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">11:00-12:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">12:00-13:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">13:00-14:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">14:00-15:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">15:00-16:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">16:00-17:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">17:00-18:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">18:00-19:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">19:00-20:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">20:00-21:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">21:00-22:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">22:00-23:00</td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">23:00-0:00</td><td></td></tr></tbody>');
+                }
+                else if ($('#what_show option:selected').text() == 'Неделя')
+                {
+                    $('#arrow_left').attr('title', 'Предыдущая неделя');
+                    $('#arrow_right').attr('title', 'Следующая неделя');
+                    $('#arrow_left').attr('formaction', '{{url_for('down_week_vertical')}}');
+                    $('#arrow_right').attr('formaction', '{{url_for('up_week_vertical')}}');
+                    $('table.show').html('<thead><tr class="scrolling_table"><th></th><th class="header">Пн<br>11\
+                    </th><th class="header">Вт<br>12</th><th class="header">Ср<br>13</th><th class="header">Чт<br>14\
+                    </th><th class="header">Пт<br>15</th><th class="header">Сб<br>16</th><th class="header">Вс<br>17\
+                    </th></tr></thead><tbody class="scrolling_table"><tr class="scrolling_table">\
+                    <td>0:00-1:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>1:00-2:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>2:00-3:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>3:00-4:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>4:00-5:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>5:00-6:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>6:00-7:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>7:00-8:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>8:00-9:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>9:00-10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>10:00-11:00</td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td><td></td></tr><tr class="scrolling_table"><td>11:00-12:00</td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>12:00-13:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>13:00-14:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>14:00-15:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>15:00-16:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>16:00-17:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>17:00-18:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>18:00-19:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>19:00-20:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>20:00-21:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
+                    <td>21:00-22:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td>22:00-23:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td>23:00-0:00</td><td></td><td></td>\
+                    <td></td><td></td><td></td><td></td><td></td></tr></tbody>');
+                }
+                else
+                {
+                    $('#arrow_left').attr('title', 'Предыдущий месяц');
+                    $('#arrow_right').attr('title', 'Следующий месяц');
+                    $('#arrow_left').attr('formaction', '{{url_for('down_month')}}');
+                    $('#arrow_right').attr('formaction', '{{url_for('up_month')}}');
+                    $('table.show').html('<thead><tr><th class="header">Пн<br>28</th><th class="header">Вт<br>29</th>\
+                    <th class="header">Ср<br>30</th><th class="header">Чт<br>31</th><th class="header">Пт<br>1 июн</th>\
+                    <th class="header">Сб<br>2</th><th class="header">Вс<br>3</th></tr></thead><tbody><tr>\
+                    <td class="header">4</td><td class="header">5</td><td class="header">6</td><td class="header">7</td>\
+                    <td class="header">8</td><td class="header">9</td><td class="header">10</td></tr><tr>\
+                    <td class="header">11</td><td class="header">12</td><td class="header">13</td>\
+                    <td class="header">14</td><td class="header">15</td><td class="header">16</td>\
+                    <td class="header">17</td></tr><tr><td class="header">18</td><td class="header">19</td>\
+                    <td class="header">20</td><td class="header">21</td><td class="header">22</td>\
+                    <td class="header">23</td><td class="header">24</td></tr><tr><td class="header">25</td>\
+                    <td class="header">26</td><td class="header">27</td><td class="header">28</td>\
+                    <td class="header">29</td><td class="header">30</td><td class="header">1 июл</td></tr></tbody>');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="for_header_and_image">
+<img src="{{url_for('static', filename='images/img-calendar.jpg')}}">
+<h1>Календарь</h1>
+    </div>
+<div class="for_weeks">
+<form method="post">
+    <button id="today" title="{{calendar.title_for_today()}}" formaction="{{url_for('show_today')}}">Сегодня</button>
+    <button id="arrow_left" title="{{down_title}}" formaction="{{url_down}}"><</button>
+    <button id="arrow_right" title="{{up_title}}" formaction="{{url_up}}">></button>
+    <b>{{calendar.text_for_today_month_and_year()}}</b>
+    <select id="what_show">
+        <option>День</option>
+        <option>Неделя</option>
+        <option>Месяц</option>
+    </select>
+</form>
+</div>
+<div class="for_calendar">
+<form method="post">
+    <button title="Предыдущий месяц" formaction="{{url_for('down_month')}}"><</button>
+    <button title="Следующий месяц" formaction="{{url_for('up_month')}}">></button>
+</form>
+    {% block CalendarForDiary %}
+    {% endblock %}
+    </div>
+<div class="for_show_table">
+<table class="show">
+    <thead>
+    <tr class="scrolling_table"><th class="empty"></th>
+        <th class="header">{{calendar.Day_format}}<br>{{calendar.Day}}</th>
+    </thead>
+    <tbody class="scrolling_table">
+        <tr class="scrolling_table">
+            <td class="empty">0:00-1:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">1:00-2:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">2:00-3:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">3:00-4:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">4:00-5:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">5:00-6:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">6:00-7:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">7:00-8:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">8:00-9:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">9:00-10:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">10:00-11:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">11:00-12:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">12:00-13:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">13:00-14:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">14:00-15:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">15:00-16:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">16:00-17:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">17:00-18:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">18:00-19:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">19:00-20:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">20:00-21:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">21:00-22:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">22:00-23:00</td>
+            <td></td>
+        </tr>
+        <tr class="scrolling_table">
+            <td class="empty">23:00-0:00</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>
