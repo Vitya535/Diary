@@ -73,7 +73,7 @@ class Calendar(HTMLCalendar):
             Calendar.Year += 1
         else:
             Calendar.Month += 1
-        Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+        # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='Месяц',
                                down_title='Предыдущий месяц', up_title='Следующий месяц', url_up='/up_month/',
                                url_down='/down_month/')
@@ -89,10 +89,38 @@ class Calendar(HTMLCalendar):
             Calendar.Year -= 1
         else:
             Calendar.Month -= 1
-        Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+        # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='Месяц',
                                down_title='Предыдущий месяц', up_title='Следующий месяц', url_up='/up_month/',
                                url_down='/down_month/')
+
+    @staticmethod
+    @app.route('/up_month_in_calendar/', methods=['POST'])
+    def up_month_in_calendar():
+        print('up_month_in_calendar')
+        # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+        if Calendar.Month == 12:
+            Calendar.Month = 1
+            Calendar.Year += 1
+        else:
+            Calendar.Month += 1
+        return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
+                               down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
+                               url_down=Calendar.url_down)
+
+    @staticmethod
+    @app.route('/down_month_in_calendar/', methods=['POST'])
+    def down_month_in_calendar():
+        print('down_month_in_calendar')
+        # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+        if Calendar.Month == 1:
+            Calendar.Month = 12
+            Calendar.Year -= 1
+        else:
+            Calendar.Month -= 1
+        return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
+                               down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
+                               url_down=Calendar.url_down)
 
     @staticmethod
     @app.route('/up_week_vertical/', methods=['POST'])
@@ -115,7 +143,7 @@ class Calendar(HTMLCalendar):
             Calendar.weeks_in_month = (Calendar.last_type_day_in_month - Calendar.first_type_day_in_month) // 5
             Calendar.week_Month = Calendar.Month
             Calendar.week_Year = Calendar.Year
-            Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+            # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='Неделя',
                                down_title='Предыдущая неделя', up_title='Следующая неделя', url_up='/up_week_vertical/',
                                url_down='/down_week_vertical/')
@@ -141,7 +169,7 @@ class Calendar(HTMLCalendar):
             Calendar.weeks_in_month = (Calendar.last_type_day_in_month - Calendar.first_type_day_in_month) // 5
             Calendar.week_Month = Calendar.Month
             Calendar.week_Year = Calendar.Year
-            Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
+            # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='Неделя',
                                down_title='Предыдущая неделя', up_title='Следующая неделя', url_up='/up_week_vertical/',
                                url_down='/down_week_vertical/')
@@ -152,6 +180,8 @@ class Calendar(HTMLCalendar):
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
         print('up_day')
+        Calendar.Month = Calendar.week_Month
+        Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day + 6 - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
            Calendar.this_week += 1
            Calendar.Day += 1
@@ -178,6 +208,8 @@ class Calendar(HTMLCalendar):
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
         print('down_day')
+        Calendar.Month = Calendar.week_Month
+        Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
            Calendar.this_week -= 1
            Calendar.Day -= 1
@@ -222,10 +254,8 @@ def show_diary():
 
 if __name__ == '__main__':
     Calendar.inst()
+    print()
     app.run()
-
-    # баг - когда я жму на кнопки около календаря, то отображение переходит в режим 'Месяц'
-
     # неделю лучше отрендерить в цикле
     # для рендеринга недели:
     # последний день недели = цифра любого дня в этой неделе + 6 - номер этого дня в неделе

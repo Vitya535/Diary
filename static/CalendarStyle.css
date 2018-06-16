@@ -125,12 +125,12 @@ tr.scrolling_table
     table-layout: fixed;
 }
 
-.empty
+#empty, .empty
 {
     width: 80px;
 }
 
-.month > tbody > tr > td.active, td:hover
+.month > tbody > tr > td.active, .month > tbody > tr > td:hover
 {
     background: #78a2b7;
 }

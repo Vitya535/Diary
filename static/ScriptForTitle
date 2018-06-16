@@ -8,9 +8,9 @@ $(document).ready(function()
     $('th.sat').attr('title', 'Суббота');
     $('th.sun').attr('title', 'Воскресенье');
 
-    $('.month > tbody > tr > td').click(function()
+    $('table.month > tbody > tr > td').click(function()
     {
         if ($(this).text().match(/^[-\+]?\d+/) !== null)
-            $(this).addClass('active').parents('.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
+            $(this).addClass('active').parents('table.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
     });
 });

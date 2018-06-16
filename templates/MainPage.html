@@ -33,7 +33,7 @@
                     $('#arrow_right').attr('title', 'Следующий день');
                     $('#arrow_left').attr('formaction', '{{url_for('down_day')}}');
                     $('#arrow_right').attr('formaction', '{{url_for('up_day')}}');
-                    $('table.show').html('<thead><tr class="scrolling_table"><th class="empty"></th>\
+                    $('table.show').html('<thead><tr class="scrolling_table"><th id="empty"></th>\
                     <th class="header">{{calendar.Day_format}}<br>{{calendar.today_Day}}</th></thead>\
                     <tbody class="scrolling_table">\
                     <tr class="scrolling_table"><td class="empty">0:00-1:00</td><td></td></tr>\
@@ -67,41 +67,41 @@
                     $('#arrow_right').attr('title', 'Следующая неделя');
                     $('#arrow_left').attr('formaction', '{{url_for('down_week_vertical')}}');
                     $('#arrow_right').attr('formaction', '{{url_for('up_week_vertical')}}');
-                    $('table.show').html('<thead><tr class="scrolling_table"><th></th><th class="header">Пн<br>11\
+                    $('table.show').html('<thead><tr class="scrolling_table"><th id="empty"></th><th class="header">Пн<br>11\
                     </th><th class="header">Вт<br>12</th><th class="header">Ср<br>13</th><th class="header">Чт<br>14\
                     </th><th class="header">Пт<br>15</th><th class="header">Сб<br>16</th><th class="header">Вс<br>17\
                     </th></tr></thead><tbody class="scrolling_table"><tr class="scrolling_table">\
-                    <td>0:00-1:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>1:00-2:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>2:00-3:00</td><td></td><td></td>\
+                    <td class="empty">0:00-1:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">1:00-2:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">2:00-3:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>3:00-4:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>4:00-5:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>5:00-6:00</td><td></td><td></td>\
+                    <td class="empty">3:00-4:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">4:00-5:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">5:00-6:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>6:00-7:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>7:00-8:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>8:00-9:00</td><td></td><td></td>\
+                    <td class="empty">6:00-7:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">7:00-8:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">8:00-9:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>9:00-10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>10:00-11:00</td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td><td></td></tr><tr class="scrolling_table"><td>11:00-12:00</td><td></td>\
+                    <td class="empty">9:00-10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">10:00-11:00</td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td><td></td></tr><tr class="scrolling_table"><td class="empty">11:00-12:00</td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>12:00-13:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>13:00-14:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>14:00-15:00</td><td></td><td></td>\
+                    <td class="empty">12:00-13:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">13:00-14:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">14:00-15:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>15:00-16:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>16:00-17:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>17:00-18:00</td><td></td><td></td>\
+                    <td class="empty">15:00-16:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">16:00-17:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">17:00-18:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>18:00-19:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>19:00-20:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>20:00-21:00</td><td></td><td></td>\
+                    <td class="empty">18:00-19:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">19:00-20:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">20:00-21:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr><tr class="scrolling_table">\
-                    <td>21:00-22:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
-                    <tr class="scrolling_table"><td>22:00-23:00</td><td></td><td></td><td></td><td></td><td></td>\
-                    <td></td><td></td></tr><tr class="scrolling_table"><td>23:00-0:00</td><td></td><td></td>\
+                    <td class="empty">21:00-22:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\
+                    <tr class="scrolling_table"><td class="empty">22:00-23:00</td><td></td><td></td><td></td><td></td><td></td>\
+                    <td></td><td></td></tr><tr class="scrolling_table"><td class="empty">23:00-0:00</td><td></td><td></td>\
                     <td></td><td></td><td></td><td></td><td></td></tr></tbody>');
                 }
                 else
@@ -147,8 +147,8 @@
 </div>
 <div class="for_calendar">
 <form method="post">
-    <button title="Предыдущий месяц" formaction="{{url_for('down_month')}}"><</button>
-    <button title="Следующий месяц" formaction="{{url_for('up_month')}}">></button>
+    <button title="Предыдущий месяц" formaction="{{url_for('down_month_in_calendar')}}"><</button>
+    <button title="Следующий месяц" formaction="{{url_for('up_month_in_calendar')}}">></button>
 </form>
     {% block CalendarForDiary %}
     {% endblock %}
