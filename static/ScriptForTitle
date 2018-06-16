@@ -10,7 +10,7 @@ $(document).ready(function()
 
     $('table.month > tbody > tr > td').click(function()
     {
-        if ($(this).text().match(/^[-\+]?\d+/) !== null)
+        if ($(this).html() != '&nbsp;')
             $(this).addClass('active').parents('table.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
     });
 });

@@ -24,6 +24,14 @@
                             rows.eq(index).css('background', 'green');
             });
 
+            $('table.show').click(function(e)
+            {
+                if (e.target.id != 'empty')
+                    // открытие всплывающей формы по клику на ячейку
+                    $('.js_overlay').fadeIn();
+                    $('.js_overlay').addClass('disabled');
+            });
+
             $('#what_show').change(function()
             {
                 $('table.show').empty();
@@ -124,6 +132,20 @@
                     <td class="header">29</td><td class="header">30</td><td class="header">1 июл</td></tr></tbody>');
                 }
             });
+
+            // закрытие всплывающей формы
+            $('.js_close_pop_up').click(function()
+            {
+                $('.js_overlay').fadeOut();
+            });
+
+            // закрытие всплывающей формы по клику вне окна
+            $(document).mouseup(function(e)
+            {
+                var popup = $('.js_pop_up');
+                if (e.target != popup[0] && popup.has(e.target).length === 0)
+                    $('.js_overlay').fadeOut();
+            });
         });
     </script>
 </head>
@@ -153,10 +175,23 @@
     {% block CalendarForDiary %}
     {% endblock %}
     </div>
+
+<div class="overlay js_overlay">
+    <div class="pop_up js_pop_up">
+        <form>
+            <input type="text" name="description_of_event" placeholder="Название события">
+            <input type="text" name="time_of_event" placeholder="Время">
+            <button class="save">Сохранить</button>
+            <div class="close_pop_up js_close_pop_up"></div>
+        </form>
+    </div>
+</div>
+
+<main>
 <div class="for_show_table">
 <table class="show">
     <thead>
-    <tr class="scrolling_table"><th class="empty"></th>
+    <tr class="scrolling_table"><th id="empty"></th>
         <th class="header">{{calendar.Day_format}}<br>{{calendar.Day}}</th>
     </thead>
     <tbody class="scrolling_table">
@@ -259,5 +294,6 @@
     </tbody>
 </table>
 </div>
+    </main>
 </body>
 </html>

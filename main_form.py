@@ -55,7 +55,7 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def title_for_today():
-        return day_name[datetime.now().isocalendar()[2]] + ', ' + str(Calendar.today_Day)\
+        return day_name[datetime.now().isocalendar()[2]].capitalize() + ', ' + str(Calendar.today_Day)\
                + ' ' + Calendar.tuple_for_months_gen_case[Calendar.today_Month - 1]
 
     @staticmethod
@@ -254,9 +254,12 @@ def show_diary():
 
 if __name__ == '__main__':
     Calendar.inst()
-    print()
     app.run()
     # неделю лучше отрендерить в цикле
     # для рендеринга недели:
     # последний день недели = цифра любого дня в этой неделе + 6 - номер этого дня в неделе
     # первый день недели = цифра любого дня в этой неделе - номер этого дня в неделе
+
+    # для всплывающей формы:
+    # 1. Сделать так, чтобы полосы таблицы не перекрывали форму
+    # 2. Сделать так, чтобы дизейблилась вся таблица и скролл бар
