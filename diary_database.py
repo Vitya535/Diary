@@ -12,28 +12,20 @@ def get_connect():
     return conn
 
 
-def update_record(new_title, new_time):  # возможно сюда можно будет пихнуть значения по умолчанию
-    sql = '''UPDATE diary_events
-            ...'''
-    cursor.execute(sql)
+def update_record(new_title, new_time, old_title, old_time):
+    t = new_time, new_title, old_title, old_time
+    cursor.execute("UPDATE diary_events SET event_time=?, event_title=? WHERE event_title==? AND event_time==?", t)
     conn.commit()
 
 
-def delete_record(title, time):  # возможно сюда можно будет пихнуть значения по умолчанию
-    sql = '''DELETE FROM diary_events WHERE ...'''
-    cursor.execute(sql)
+def delete_record(title, time):
+    t = title, time
+    cursor.execute("DELETE FROM diary_events WHERE event_title==? AND event_time==?", t)
     conn.commit()
 
 
-def add_record(add_title, add_time):  # возможно сюда можно будет пихнуть значения по умолчанию
-    sql = '''INSERT INTO diary_events VALUES(?)''', tuple(add_title, add_time)
-    cursor.execute(sql)
+def add_record(add_title, add_time):
+    t = add_title, add_time
+    cursor.execute("INSERT INTO diary_events VALUES(?)", t)
     conn.commit()
-
-# нужно добавить функции:
-# редактирования записи
-# удаления записи
-# добавления записи (название + время (дата + часы), время(дата) + (без заголовка),
-# время (дата + часы) + (без заголовка), название + время (дата))
-
 # сделать чтобы эти записи отображались на ежедневнике
