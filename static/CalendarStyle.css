@@ -223,3 +223,21 @@ button.save
     transform: rotate(45deg);
     left: -4px;
 }
+
+div.for_event_lines
+{
+    width: 100%;
+    height: 40px;
+    background-color: green;
+    text-align: left;
+    margin-top: 5px;
+}
+
+.scrolling
+{
+    display: block;
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    overflow-y: auto;
+}

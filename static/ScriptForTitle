@@ -21,10 +21,10 @@ $(document).ready(function()
             $('.js_overlay').fadeIn();
 
             // закрытие всплывающей формы по клику вне окна
-            $('.js_overlay').click(function(e)
+            $('.js_overlay').click(function(ev)
             {
                 var popup = $('.js_pop_up');
-                if (e.target != popup[0] && popup.has(e.target).length === 0)
+                if (ev.target != popup[0] && popup.has(ev.target).length === 0)
                     $('.js_overlay').fadeOut();
             });
 
@@ -35,7 +35,10 @@ $(document).ready(function()
             });
 
             $('button.save').click(function()
-            {
+            {   // можно попробовать по индексам определить на какую ячейку кликнули
+                // добавление события для отображения на ежедневник
+                $('#'+cell_clicked).append('<div class="for_event_lines"></div>');
+                $('div.for_event_lines').html($('#description').val() + '<br>' + $('#event_time').val());
                 $('.js_overlay').fadeOut();
             });
         });
