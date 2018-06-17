@@ -13,4 +13,30 @@ $(document).ready(function()
         if ($(this).html() != '&nbsp;')
             $(this).addClass('active').parents('table.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
     });
+
+    $('table.show').click(function(e)
+    {
+        if (e.target.id != 'empty')
+        // открытие всплывающей формы по клику на ячейку
+            $('.js_overlay').fadeIn();
+
+            // закрытие всплывающей формы по клику вне окна
+            $('.js_overlay').click(function(e)
+            {
+                var popup = $('.js_pop_up');
+                if (e.target != popup[0] && popup.has(e.target).length === 0)
+                    $('.js_overlay').fadeOut();
+            });
+
+            // закрытие всплывающей формы по клику на крестик
+            $('.js_close_pop_up').click(function()
+            {
+                $('.js_overlay').fadeOut();
+            });
+
+            $('button.save').click(function()
+            {
+                $('.js_overlay').fadeOut();
+            });
+        });
 });

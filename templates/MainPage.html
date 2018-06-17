@@ -124,27 +124,6 @@
                     <td class="header">29</td><td class="header">30</td><td class="header">1 июл</td></tr></tbody>');
                 }
             });
-
-            $('table.show').click(function(e)
-            {
-                if (e.target.id != 'empty')
-                    // открытие всплывающей формы по клику на ячейку
-                    $('.js_overlay').fadeIn();
-
-                // закрытие всплывающей формы по клику вне окна
-                $('.js_overlay').click(function(e)
-                {
-                    var popup = $('.js_pop_up');
-                    if (e.target != popup[0] && popup.has(e.target).length === 0)
-                        $('.js_overlay').fadeOut();
-                });
-
-                // закрытие всплывающей формы по клику на крестик
-                $('.js_close_pop_up').click(function()
-                {
-                    $('.js_overlay').fadeOut();
-                });
-            });
         });
     </script>
 </head>
@@ -177,10 +156,10 @@
 
 <div class="overlay js_overlay">
     <div class="pop_up js_pop_up">
-        <form>
+        <form method="post">
             <input type="text" name="description_of_event" id="description" placeholder="Название события">
             <input type="text" name="time_of_event" id="event_time" placeholder="Время">
-            <button class="save">Сохранить</button>
+            <button class="save" formaction="/add_data/">Сохранить</button>
             <div class="close_pop_up js_close_pop_up"></div>
         </form>
     </div>

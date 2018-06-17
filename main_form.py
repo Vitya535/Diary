@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from calendar import HTMLCalendar, month_name, day_name, monthrange, weekday
 from datetime import datetime, date
 from locale import setlocale, LC_ALL
+from sqlite3 import connect
 
 # сделать базу данных в SQLite
 # время (дата.время тип данных)
@@ -27,6 +28,54 @@ class Calendar(HTMLCalendar):
                                  'октября', 'ноября', 'декабря')
     first_type_day_in_month, last_type_day_in_month, weeks_in_month = 0, 0, 0
     this_week = today_Day // 5
+
+    # взаимодействие с базой данных
+    @staticmethod
+    @app.route('/update_data/', methods=['POST'])
+    def update_record(new_title, new_time, old_title, old_time):
+        con = connect("data_for_diary.db")  # а как получить старые данные?
+        cursor = con.cursor()
+        cursor.execute("UPDATE diary_events SET event_time=?, event_title=? WHERE event_title==? AND event_time==?",
+                       (new_time, new_title, old_title, old_time))
+        con.commit()
+        cursor.execute("SELECT * FROM diary_events")
+        print(cursor.fetchall())
+        con.close()
+        return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
+                               down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
+                               url_down=Calendar.url_down)
+
+    @staticmethod
+    @app.route('/del_data/', methods=['POST'])
+    def delete_record():
+        del_title = request.form['description_of_event']
+        del_time = request.form['time_of_event']
+        con = connect("data_for_diary.db")
+        cursor = con.cursor()
+        cursor.execute("DELETE FROM diary_events WHERE event_title==? AND event_time==?", (del_title, del_time))
+        con.commit()
+        cursor.execute("SELECT * FROM diary_events")
+        print(cursor.fetchall())
+        con.close()
+        return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
+                               down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
+                               url_down=Calendar.url_down)
+
+    @staticmethod
+    @app.route('/add_data/', methods=['POST'])
+    def add_record():
+        add_title = request.form['description_of_event']
+        add_time = request.form['time_of_event']
+        con = connect("data_for_diary.db")
+        cursor = con.cursor()
+        cursor.execute("INSERT INTO diary_events VALUES(?, ?)", (add_title, add_time))
+        con.commit()
+        cursor.execute("SELECT * FROM diary_events")
+        print(cursor.fetchall())
+        con.close()
+        return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
+                               down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
+                               url_down=Calendar.url_down)
 
     @staticmethod
     def get_first_type_day_in_month():
