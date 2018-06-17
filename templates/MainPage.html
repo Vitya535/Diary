@@ -24,14 +24,6 @@
                             rows.eq(index).css('background', 'green');
             });
 
-            $('table.show').click(function(e)
-            {
-                if (e.target.id != 'empty')
-                    // открытие всплывающей формы по клику на ячейку
-                    $('.js_overlay').fadeIn();
-                    $('.js_overlay').addClass('disabled');
-            });
-
             $('#what_show').change(function()
             {
                 $('table.show').empty();
@@ -133,18 +125,25 @@
                 }
             });
 
-            // закрытие всплывающей формы
-            $('.js_close_pop_up').click(function()
+            $('table.show').click(function(e)
             {
-                $('.js_overlay').fadeOut();
-            });
+                if (e.target.id != 'empty')
+                    // открытие всплывающей формы по клику на ячейку
+                    $('.js_overlay').fadeIn();
 
-            // закрытие всплывающей формы по клику вне окна
-            $(document).mouseup(function(e)
-            {
-                var popup = $('.js_pop_up');
-                if (e.target != popup[0] && popup.has(e.target).length === 0)
+                // закрытие всплывающей формы по клику вне окна
+                $('.js_overlay').click(function(e)
+                {
+                    var popup = $('.js_pop_up');
+                    if (e.target != popup[0] && popup.has(e.target).length === 0)
+                        $('.js_overlay').fadeOut();
+                });
+
+                // закрытие всплывающей формы по клику на крестик
+                $('.js_close_pop_up').click(function()
+                {
                     $('.js_overlay').fadeOut();
+                });
             });
         });
     </script>

@@ -55,7 +55,7 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def title_for_today():
-        return day_name[datetime.now().isocalendar()[2]].capitalize() + ', ' + str(Calendar.today_Day)\
+        return day_name[datetime.now().isocalendar()[2] - 1].capitalize() + ', ' + str(Calendar.today_Day)\
                + ' ' + Calendar.tuple_for_months_gen_case[Calendar.today_Month - 1]
 
     @staticmethod
@@ -183,16 +183,16 @@ class Calendar(HTMLCalendar):
         Calendar.Month = Calendar.week_Month
         Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day + 6 - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
-           Calendar.this_week += 1
-           Calendar.Day += 1
+            Calendar.this_week += 1
+            Calendar.Day += 1
         elif Calendar.Day == monthrange(Calendar.Year, Calendar.Month)[1]:
-           Calendar.Month += 1
-           Calendar.Day = 1
-           Calendar.this_week = 1
+            Calendar.Month += 1
+            Calendar.Day = 1
+            Calendar.this_week = 1
         elif Calendar.Month == 12:
-           Calendar.Month = 1
-           Calendar.Year += 1
-           Calendar.Day = 1
+            Calendar.Month = 1
+            Calendar.Year += 1
+            Calendar.Day = 1
         else:
             Calendar.Day += 1
         Calendar.week_Month = Calendar.Month
@@ -211,16 +211,16 @@ class Calendar(HTMLCalendar):
         Calendar.Month = Calendar.week_Month
         Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
-           Calendar.this_week -= 1
-           Calendar.Day -= 1
+            Calendar.this_week -= 1
+            Calendar.Day -= 1
         elif Calendar.Day == 1:
-           Calendar.Month -= 1
-           Calendar.Day = monthrange(Calendar.Year, Calendar.Month)[1]
-           Calendar.this_week = (Calendar.last_type_day_in_month - Calendar.first_type_day_in_month) // 5
+            Calendar.Month -= 1
+            Calendar.Day = monthrange(Calendar.Year, Calendar.Month)[1]
+            Calendar.this_week = (Calendar.last_type_day_in_month - Calendar.first_type_day_in_month) // 5
         elif Calendar.Month == 1:
-           Calendar.Month = 12
-           Calendar.Year -= 1
-           Calendar.Day = monthrange(Calendar.Year, Calendar.Month)[1]
+            Calendar.Month = 12
+            Calendar.Year -= 1
+            Calendar.Day = monthrange(Calendar.Year, Calendar.Month)[1]
         else:
             Calendar.Day -= 1
         Calendar.week_Month = Calendar.Month

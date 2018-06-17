@@ -149,12 +149,14 @@ button.save
 
 .overlay
 {
+    z-index: 99;
     position: absolute;
     width: 100%;
     height: 100vh;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, .6);
+    display: none;
 }
 
 .pop_up
@@ -168,6 +170,7 @@ button.save
     box-sizing: border-box;
     background-color: #ff5252;
     color: #fff;
+    z-index: 100;
 }
 
 .close_pop_up
