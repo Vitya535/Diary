@@ -19,16 +19,17 @@ def update_record(new_title, new_time):  # возможно сюда можно 
     conn.commit()
 
 
-def delete_record(title, time):
+def delete_record(title, time):  # возможно сюда можно будет пихнуть значения по умолчанию
     sql = '''DELETE FROM diary_events WHERE ...'''
     cursor.execute(sql)
     conn.commit()
 
 
-def add_record(add_title, add_time):
+def add_record(add_title, add_time):  # возможно сюда можно будет пихнуть значения по умолчанию
     sql = '''INSERT INTO diary_events VALUES(?)''', tuple(add_title, add_time)
     cursor.execute(sql)
     conn.commit()
+
 # нужно добавить функции:
 # редактирования записи
 # удаления записи
