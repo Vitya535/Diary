@@ -156,7 +156,7 @@
 
 <div class="overlay js_overlay">
     <div class="pop_up js_pop_up">
-        <form method="post">
+        <form method="post" onsubmit="return false;">
             <input type="text" name="description_of_event" id="description" placeholder="Название события">
             <input type="text" name="time_of_event" id="event_time" placeholder="Время">
             <button class="save" formaction="/add_data/">Сохранить</button>

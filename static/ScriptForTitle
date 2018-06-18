@@ -16,6 +16,7 @@ $(document).ready(function()
 
     $('table.show').click(function(e)
     {
+        var cell_clicked = e.target;
         if (e.target.id != 'empty')
         // открытие всплывающей формы по клику на ячейку
             $('.js_overlay').fadeIn();
@@ -35,11 +36,11 @@ $(document).ready(function()
             });
 
             $('button.save').click(function()
-            {   // можно попробовать по индексам определить на какую ячейку кликнули
+            {
                 // добавление события для отображения на ежедневник
-                $('#'+cell_clicked).append('<div class="for_event_lines"></div>');
-                $('div.for_event_lines').html($('#description').val() + '<br>' + $('#event_time').val());
                 $('.js_overlay').fadeOut();
+                $(cell_clicked).append('<div class="for_event_lines">'+ $('#description').val() + '<br>' + $('#event_time').val() + '</div>');
+                cell_clicked = null;
             });
         });
 });
