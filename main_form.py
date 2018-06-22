@@ -1,13 +1,10 @@
+"""Данный модуль отвечает за серверную часть приложения"""
 from flask import Flask, render_template, request
 from calendar import HTMLCalendar, month_name, day_name, monthrange, weekday
 from datetime import datetime, date
 from locale import setlocale, LC_ALL
 from sqlite3 import connect
 from re import findall
-
-# сделать базу данных в SQLite
-# время (дата.время тип данных)
-# описание события (текст)
 
 # App config.
 DEBUG = True
@@ -19,11 +16,13 @@ setlocale(LC_ALL, '')
 
 @app.template_filter('regexp_split')
 def regexp_split(string):
+    """Фильтр для разбиения строки по регулярному выражению"""
     split = findall(r"[\w]+", string)
     return split
 
 
 class Calendar(HTMLCalendar):
+    """Класс календаря"""
     _instance = None
     event_data = []
     buf_for_select, down_title, up_title, url_up, url_down = \
@@ -41,6 +40,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/update_data/', methods=['POST'])
     def update_record():
+        """Редактирование записи в базе данных"""
         new_title = request.form['description_of_event']
         new_time = request.form['time_of_event']
         spli = new_time.split('-')
@@ -60,7 +60,6 @@ class Calendar(HTMLCalendar):
         con.close()
         index_of_data = Calendar.event_data.index((old_title, old_time))
         Calendar.event_data[index_of_data] = (new_title, new_time)
-        print(Calendar.event_data)
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
                                down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
                                url_down=Calendar.url_down)
@@ -68,6 +67,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/del_data/', methods=['POST'])
     def delete_record():
+        """Удаление записи из базы данных"""
         del_title = request.form['description_of_event']
         del_time = request.form['time_of_event']
         spl = del_time.split('-')
@@ -86,6 +86,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/add_data/', methods=['POST'])
     def add_record():
+        """Добавление записи в базу данных"""
         add_title = request.form['description_of_event']
         add_time = request.form['time_of_event']
         split = findall(r"[\w'^:]+", add_time)
@@ -97,13 +98,13 @@ class Calendar(HTMLCalendar):
         con.commit()
         con.close()
         Calendar.event_data.append((add_title, add_time))
-        print(Calendar.event_data)
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
                                down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
                                url_down=Calendar.url_down)
 
     @staticmethod
     def get_first_type_day_in_month():
+        """Получение первого дня определенного типа в месяце"""
         buf = Calendar.inst().monthdays2calendar(Calendar.Year, Calendar.Month)
         for i in range(len(buf)):
             if buf[i][weekday(Calendar.Year, Calendar.Month, Calendar.Day)][0]:
@@ -112,6 +113,7 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def get_last_type_day_in_month():
+        """Получение последнего дня определенного типа в месяце"""
         buf = Calendar.inst().monthdays2calendar(Calendar.Year, Calendar.Month)
         for i in range(0, -len(buf), -1):
             if buf[i][weekday(Calendar.Year, Calendar.Month, Calendar.Day)][0]:
@@ -120,6 +122,7 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def inst():
+        """Инициализация календаря через одиночку"""
         if Calendar._instance is None:
             Calendar._instance = Calendar()
             Calendar.get_first_type_day_in_month()
@@ -129,22 +132,25 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def title_for_today():
+        """Возвращает текст всплывающей подсказки для сегодняшнего дня"""
         return day_name[datetime.now().isocalendar()[2] - 1].capitalize() + ', ' + str(Calendar.today_Day) \
                + ' ' + Calendar.tuple_for_months_gen_case[Calendar.today_Month - 1]
 
     @staticmethod
     def for_input_time_today():
+        """Возвращает текст для input времени в всплывающей форме"""
         return str(Calendar.Day) + ' ' + Calendar.tuple_for_months_gen_case[Calendar.Month - 1] + ' ' + \
                str(Calendar.Year)
 
     @staticmethod
     def text_for_today_month_and_year():
+        """Возвращает текст для названия месяца и года"""
         return month_name[Calendar.today_Month] + ' ' + str(Calendar.today_Year)
 
     @staticmethod
     @app.route('/up_month/', methods=['POST'])
     def up_month():
-        print('up_month')
+        """Пролистывание ежедневника по месяцам вперед"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'Месяц', 'Предыдущий месяц', 'Следующий месяц', '/up_month/', '/down_month/'
         if Calendar.Month == 12:
@@ -160,7 +166,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/down_month/', methods=['POST'])
     def down_month():
-        print('down_month')
+        """Пролистывание ежедневника по месяцам назад"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'Месяц', 'Предыдущий месяц', 'Следующий месяц', '/up_month/', '/down_month/'
         if Calendar.Month == 1:
@@ -176,7 +182,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/up_month_in_calendar/', methods=['POST'])
     def up_month_in_calendar():
-        print('up_month_in_calendar')
+        """Пролистывание календаря по месяцам вперед"""
         # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         if Calendar.Month == 12:
             Calendar.Month = 1
@@ -190,7 +196,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/down_month_in_calendar/', methods=['POST'])
     def down_month_in_calendar():
-        print('down_month_in_calendar')
+        """Пролистывание календаря по месяцам назад"""
         # Calendar.Day_format = date(Calendar.Year, Calendar.Month, Calendar.Day).strftime('%a')
         if Calendar.Month == 1:
             Calendar.Month = 12
@@ -204,7 +210,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/up_week_vertical/', methods=['POST'])
     def up_week_vertical():
-        print('up_week_vertical')
+        """Пролистывание календаря по неделям вперед вертикально"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'Неделя', 'Предыдущая неделя', 'Следующая неделя', '/up_week_vertical/', '/down_week_vertical/'
         if Calendar.this_week != Calendar.weeks_in_month:
@@ -230,7 +236,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/down_week_vertical/', methods=['POST'])
     def down_week_vertical():
-        print('down_week_vertical')
+        """Пролистывание календаря по месяцам назад вертикально"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'Неделя', 'Предыдущая неделя', 'Следующая неделя', '/up_week_vertical/', '/down_week_vertical/'
         if Calendar.this_week != 1:
@@ -256,9 +262,9 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/up_day/', methods=['POST'])
     def up_day():
+        """Пролистывание календаря по дням вперед"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
-        print('up_day')
         Calendar.Month = Calendar.week_Month
         Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day + 6 - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
@@ -284,9 +290,9 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/down_day/', methods=['POST'])
     def down_day():
+        """Пролистывание календаря по дням назад"""
         Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
             'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
-        print('down_day')
         Calendar.Month = Calendar.week_Month
         Calendar.Year = Calendar.week_Year
         if Calendar.Day == Calendar.Day - weekday(Calendar.Year, Calendar.Month, Calendar.Day):
@@ -312,6 +318,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/', methods=['POST'])
     def show_today():
+        """Вернуться в календаре на месяц сегодняшнего дня"""
         Calendar.Month, Calendar.week_Month = Calendar.today_Month, Calendar.today_Month
         Calendar.Year, Calendar.week_Year = Calendar.today_Year, Calendar.today_Year
         Calendar.Day = Calendar.today_Day
@@ -324,6 +331,7 @@ class Calendar(HTMLCalendar):
 
 @app.route('/', methods=['GET', 'POST'])
 def show_diary():
+    """Изначальный показ веб-страницы"""
     Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
         'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
     con = connect("data_for_diary.db")
@@ -332,7 +340,6 @@ def show_diary():
     con.commit()
     Calendar.event_data = cursor.fetchall()
     con.close()
-    print(Calendar.event_data)
     return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='День',
                            down_title='Предыдущий день', up_title='Следующий день', url_up='/up_day/',
                            url_down='/down_day/')
