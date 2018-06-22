@@ -14,33 +14,26 @@ $(document).ready(function()
             $(this).addClass('active').parents('table.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
     });
 
-    $('table.show').click(function(e)
+    // удаление события (пока только визуальное)
+    $('div.for_event_lines').mousedown(function(e)
     {
-        var cell_clicked = e.target;
-        if (e.target.id != 'empty')
-        // открытие всплывающей формы по клику на ячейку
-            $('.js_overlay').fadeIn();
+        line_clicked = $(e.target);
+        line_values = $(e.target).html().split('<br>');
+        if (e.button == 2)
+        {
+            $('#delete').offset({top:e.pageY, left:e.pageX});
+            $('#delete').fadeIn();
+        }
+    });
 
-            // закрытие всплывающей формы по клику вне окна
-            $('.js_overlay').click(function(ev)
-            {
-                var popup = $('.js_pop_up');
-                if (ev.target != popup[0] && popup.has(ev.target).length === 0)
-                    $('.js_overlay').fadeOut();
-            });
+    $('body').mousedown(function(e)
+    {
+        if (e.button != 2 || e.target.className != 'for_event_lines')
+            $('#delete').fadeOut();
+    });
 
-            // закрытие всплывающей формы по клику на крестик
-            $('.js_close_pop_up').click(function()
-            {
-                $('.js_overlay').fadeOut();
-            });
-
-            $('button.save').click(function()
-            {
-                // добавление события для отображения на ежедневник
-                $('.js_overlay').fadeOut();
-                $(cell_clicked).append('<div class="for_event_lines">'+ $('#description').val() + '<br>' + $('#event_time').val() + '</div>');
-                cell_clicked = null;
-            });
-        });
+    $('body').contextmenu(function()
+    {
+        return false;
+    });
 });

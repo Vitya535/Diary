@@ -130,7 +130,7 @@ tr.scrolling_table
     width: 80px;
 }
 
-.month > tbody > tr > td.active, .month > tbody > tr > td:hover
+.month > tbody > tr > td.active, .month > tbody > tr > td:hover, #delete:hover
 {
     background: #78a2b7;
 }
@@ -240,4 +240,19 @@ div.for_event_lines
     height: 40px;
     overflow: hidden;
     overflow-y: auto;
+}
+
+#delete
+{
+    position: fixed;
+    left: 0;
+    top: 0;
+    text-align: center;
+    width: 70px;
+    height: 20px;
+    background: white;
+    border: 2px solid black;
+    z-index: 150;
+    display: none;
+    cursor: pointer;
 }

@@ -3,6 +3,7 @@ from calendar import HTMLCalendar, month_name, day_name, monthrange, weekday
 from datetime import datetime, date
 from locale import setlocale, LC_ALL
 from sqlite3 import connect
+from re import findall
 
 # сделать базу данных в SQLite
 # время (дата.время тип данных)
@@ -16,8 +17,15 @@ app.config['SECRET_KEY'] = 'NotTellAnyone'
 setlocale(LC_ALL, '')
 
 
+@app.template_filter('regexp_split')
+def regexp_split(string):
+    split = findall(r"[\w]+", string)
+    return split
+
+
 class Calendar(HTMLCalendar):
     _instance = None
+    event_data = []
     buf_for_select, down_title, up_title, url_up, url_down = \
         'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
     today_Day_format, Day_format = datetime.now().strftime('%a'), datetime.now().strftime('%a')
@@ -50,6 +58,9 @@ class Calendar(HTMLCalendar):
     def delete_record():
         del_title = request.form['description_of_event']
         del_time = request.form['time_of_event']
+        split = findall(r"[\w'^:]+", del_time)
+        del_time = split[2] + '-' + str(Calendar.tuple_for_months_gen_case.index(split[1]) + 1) + '-' + split[0] + \
+                   ' 0' + split[3] + ':00.000'
         con = connect("data_for_diary.db")
         cursor = con.cursor()
         cursor.execute("DELETE FROM diary_events WHERE event_title==? AND event_time==?", (del_title, del_time))
@@ -66,13 +77,16 @@ class Calendar(HTMLCalendar):
     def add_record():
         add_title = request.form['description_of_event']
         add_time = request.form['time_of_event']
+        split = findall(r"[\w'^:]+", add_time)
+        add_time = split[2] + '-' + str(Calendar.tuple_for_months_gen_case.index(split[1]) + 1) + '-' + split[0] + \
+                   ' 0' + split[3] + ':00.000'
         con = connect("data_for_diary.db")
         cursor = con.cursor()
         cursor.execute("INSERT INTO diary_events VALUES(?, ?)", (add_title, add_time))
         con.commit()
-        cursor.execute("SELECT * FROM diary_events")
-        print(cursor.fetchall())
         con.close()
+        Calendar.event_data.append((add_title, add_time))
+        print(Calendar.event_data)
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
                                down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
                                url_down=Calendar.url_down)
@@ -104,8 +118,13 @@ class Calendar(HTMLCalendar):
 
     @staticmethod
     def title_for_today():
-        return day_name[datetime.now().isocalendar()[2] - 1].capitalize() + ', ' + str(Calendar.today_Day)\
+        return day_name[datetime.now().isocalendar()[2] - 1].capitalize() + ', ' + str(Calendar.today_Day) \
                + ' ' + Calendar.tuple_for_months_gen_case[Calendar.today_Month - 1]
+
+    @staticmethod
+    def for_input_time_today():
+        return str(Calendar.Day) + ' ' + Calendar.tuple_for_months_gen_case[Calendar.Month - 1] + ' ' + \
+               str(Calendar.Year)
 
     @staticmethod
     def text_for_today_month_and_year():
@@ -282,6 +301,7 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/', methods=['POST'])
     def show_today():
+        print('today')
         Calendar.Month, Calendar.week_Month = Calendar.today_Month, Calendar.today_Month
         Calendar.Year, Calendar.week_Year = Calendar.today_Year, Calendar.today_Year
         Calendar.Day = Calendar.today_Day
@@ -294,8 +314,17 @@ class Calendar(HTMLCalendar):
 
 @app.route('/', methods=['GET', 'POST'])
 def show_diary():
+    print('show')
     Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
         'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
+    con = connect("data_for_diary.db")
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM diary_events")
+    con.commit()
+    Calendar.event_data = cursor.fetchall()
+    con.close()
+    print(Calendar.event_data)
+    print(Calendar.Day)
     return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='День',
                            down_title='Предыдущий день', up_title='Следующий день', url_up='/up_day/',
                            url_down='/down_day/')
@@ -304,11 +333,3 @@ def show_diary():
 if __name__ == '__main__':
     Calendar.inst()
     app.run()
-    # неделю лучше отрендерить в цикле
-    # для рендеринга недели:
-    # последний день недели = цифра любого дня в этой неделе + 6 - номер этого дня в неделе
-    # первый день недели = цифра любого дня в этой неделе - номер этого дня в неделе
-
-    # для всплывающей формы:
-    # 1. Сделать так, чтобы полосы таблицы не перекрывали форму
-    # 2. Сделать так, чтобы дизейблилась вся таблица и скролл бар
