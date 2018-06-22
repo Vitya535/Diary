@@ -13,27 +13,4 @@ $(document).ready(function()
         if ($(this).html() != '&nbsp;')
             $(this).addClass('active').parents('table.month').children('tbody').find('> tr > td.active').not(this).removeClass('active');
     });
-
-    // удаление события (пока только визуальное)
-    $('div.for_event_lines').mousedown(function(e)
-    {
-        line_clicked = $(e.target);
-        line_values = $(e.target).html().split('<br>');
-        if (e.button == 2)
-        {
-            $('#delete').offset({top:e.pageY, left:e.pageX});
-            $('#delete').fadeIn();
-        }
-    });
-
-    $('body').mousedown(function(e)
-    {
-        if (e.button != 2 || e.target.className != 'for_event_lines')
-            $('#delete').fadeOut();
-    });
-
-    $('body').contextmenu(function()
-    {
-        return false;
-    });
 });

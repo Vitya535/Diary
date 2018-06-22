@@ -40,15 +40,27 @@ class Calendar(HTMLCalendar):
     # взаимодействие с базой данных
     @staticmethod
     @app.route('/update_data/', methods=['POST'])
-    def update_record(new_title, new_time, old_title, old_time):
+    def update_record():
+        new_title = request.form['description_of_event']
+        new_time = request.form['time_of_event']
+        spli = new_time.split('-')
+        new_time = str(Calendar.Year) + '-' + str(Calendar.Month) + '-' + str(Calendar.Day) + ' 0' + str(spli[0]) \
+                   + ':00.000'
+        addition = request.form['additional']
+        spl = addition.split('<br>')
+        old_title = spl[0]
+        time = spl[1].split('-')
+        old_time = str(Calendar.Year) + '-' + str(Calendar.Month) + '-' + str(Calendar.Day) + ' 0' + str(time[0])\
+                   + ':00.000'
         con = connect("data_for_diary.db")  # а как получить старые данные?
         cursor = con.cursor()
         cursor.execute("UPDATE diary_events SET event_time=?, event_title=? WHERE event_title==? AND event_time==?",
-                       (new_time, new_title, old_title, old_time))
+                      (new_time, new_title, old_title, old_time))
         con.commit()
-        cursor.execute("SELECT * FROM diary_events")
-        print(cursor.fetchall())
         con.close()
+        index_of_data = Calendar.event_data.index((old_title, old_time))
+        Calendar.event_data[index_of_data] = (new_title, new_time)
+        print(Calendar.event_data)
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
                                down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
                                url_down=Calendar.url_down)
@@ -58,16 +70,15 @@ class Calendar(HTMLCalendar):
     def delete_record():
         del_title = request.form['description_of_event']
         del_time = request.form['time_of_event']
-        split = findall(r"[\w'^:]+", del_time)
-        del_time = split[2] + '-' + str(Calendar.tuple_for_months_gen_case.index(split[1]) + 1) + '-' + split[0] + \
-                   ' 0' + split[3] + ':00.000'
+        spl = del_time.split('-')
+        del_time = str(Calendar.Year) + '-' + str(Calendar.Month) + '-' + str(Calendar.Day) + ' 0' + str(spl[0])\
+                   + ':00.000'
         con = connect("data_for_diary.db")
         cursor = con.cursor()
         cursor.execute("DELETE FROM diary_events WHERE event_title==? AND event_time==?", (del_title, del_time))
         con.commit()
-        cursor.execute("SELECT * FROM diary_events")
-        print(cursor.fetchall())
         con.close()
+        Calendar.event_data.remove((del_title, del_time))
         return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select=Calendar.buf_for_select,
                                down_title=Calendar.down_title, up_title=Calendar.up_title, url_up=Calendar.url_up,
                                url_down=Calendar.url_down)
@@ -301,7 +312,6 @@ class Calendar(HTMLCalendar):
     @staticmethod
     @app.route('/', methods=['POST'])
     def show_today():
-        print('today')
         Calendar.Month, Calendar.week_Month = Calendar.today_Month, Calendar.today_Month
         Calendar.Year, Calendar.week_Year = Calendar.today_Year, Calendar.today_Year
         Calendar.Day = Calendar.today_Day
@@ -314,7 +324,6 @@ class Calendar(HTMLCalendar):
 
 @app.route('/', methods=['GET', 'POST'])
 def show_diary():
-    print('show')
     Calendar.buf_for_select, Calendar.down_title, Calendar.up_title, Calendar.url_up, Calendar.url_down = \
         'День', 'Предыдущий день', 'Следующий день', '/up_day/', '/down_day/'
     con = connect("data_for_diary.db")
@@ -324,7 +333,6 @@ def show_diary():
     Calendar.event_data = cursor.fetchall()
     con.close()
     print(Calendar.event_data)
-    print(Calendar.Day)
     return render_template('ExtendPageWithDiary', calendar=Calendar.inst(), buf_for_select='День',
                            down_title='Предыдущий день', up_title='Следующий день', url_up='/up_day/',
                            url_down='/down_day/')

@@ -111,6 +111,7 @@
             {
                 if (e.target.className != 'for_event_lines')
                 {
+                    $('button.save').attr('formaction', '{{url_for('add_record')}}');
                     var cell_clicked = e.target;
                     if (e.target.id != 'empty')
                     {
@@ -148,10 +149,12 @@
             // редактирование события (пока только визуальное)
             $('div.for_event_lines').click(function(e)
             {
+                $('button.save').attr('formaction', '{{url_for('update_record')}}');
                 var cell_clicked = e.target;
                 line_values = $(e.target).html().split('<br>');
                 $('#description').attr("value", line_values[0]);
                 $('#event_time').attr("value", line_values[1]);
+                $('#additional_data').attr("value", line_values[0] + '<br>' + line_values[1]);
                 $('.js_overlay').fadeIn();
 
                 // закрытие всплывающей формы по клику вне окна
@@ -170,6 +173,7 @@
 
                 $('button.save').click(function()
                 {
+
                     // редактирование события для отображения на ежедневник
                     $('.js_overlay').fadeOut();
                     $(cell_clicked).append('<div class="for_event_lines">' + $('#description').val() + '<br>' + $(cell_clicked).parent().find('td.empty').text() + '</div>');
@@ -177,10 +181,42 @@
                 cell_clicked = null;
             });
 
+             // удаление события (пока только визуальное)
+            $('div.for_event_lines').mousedown(function(e)
+            {
+                line_clicked = $(e.target);
+                line_values = $(e.target).html().split('<br>');
+                if (e.button == 2)
+                {
+                    $('#delete').offset({top:e.pageY, left:e.pageX});
+                    $('#delete').fadeIn();
+                }
+            });
+
             $('#delete').click(function()
             {
+                $('#description').attr("value", line_values[0]);
+                $('#event_time').attr("value", line_values[1]);
+                var msg = $('#pop_up_form').serialize();
+                $.ajax
+                ({
+                    method: 'POST',
+                    url: '/del_data/',
+                    data: msg
+                });
                 $(line_clicked).remove();
                 $(this).fadeOut();
+            });
+
+            $('body').mousedown(function(e)
+            {
+                if (e.button != 2 || e.target.className != 'for_event_lines')
+                    $('#delete').fadeOut();
+            });
+
+            $('body').contextmenu(function()
+            {
+                return false;
             });
         });
     </script>
@@ -218,6 +254,7 @@
             <input type="text" name="description_of_event" id="description" placeholder="Название события">
             <input type="text" name="time_of_event" id="event_time" placeholder="Время">
             <button class="save" formaction="/add_data/">Сохранить</button>
+            <input type="text" hidden name="additional" id="additional_data">
             <div class="close_pop_up js_close_pop_up"></div>
         </form>
     </div>
