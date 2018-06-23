@@ -113,9 +113,9 @@ $(document).ready(function()
             if (e.target.id != 'empty')
             {
                 // открытие всплывающей формы по клику на ячейку
-                $('#event_time').attr("value", '{{calendar.for_input_time_today()}}' + ', ' + $(cell_clicked).parent().find('td.empty').text());
+                $('#event_time').attr("value", '{{utils.for_input_time_today(calendar.Day, calendar.Month, calendar.Year)}}' + ', ' + $(cell_clicked).parent().find('td.empty').text());
                 if (e.target.className == 'header scrolling')
-                    $('#event_time').attr("value", '{{calendar.for_input_time_today()}}');
+                    $('#event_time').attr("value", '{{utils.for_input_time_today(calendar.Day, calendar.Month, calendar.Year)}}');
                 $('.js_overlay').fadeIn();
             }
 

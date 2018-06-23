@@ -18,10 +18,10 @@
 
 <div class="for_weeks">
 <form method="post">
-    <button id="today" title="{{calendar.title_for_today()}}" formaction="{{url_for('show_today')}}">Сегодня</button>
+    <button id="today" title="{{utils.title_for_today(calendar.today_Day, calendar.today_Month, calendar.today_Year)}}" formaction="{{url_for('show_today')}}">Сегодня</button>
     <button id="arrow_left" title="{{down_title}}" formaction="{{url_down}}"><</button>
     <button id="arrow_right" title="{{up_title}}" formaction="{{url_up}}">></button>
-    <b>{{calendar.text_for_today_month_and_year()}}</b>
+    <b>{{utils.text_for_today_month_and_year(calendar.today_Month, calendar.today_Year)}}</b>
     <select id="what_show">
         <option>День</option>
         <option>Неделя</option>
