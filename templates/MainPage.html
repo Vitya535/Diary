@@ -4,10 +4,11 @@
 <head>
 <title>Web-Diary</title>
     <link rel="icon" href="{{url_for('static', filename='images/img-calendar.ico')}}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='CalendarStyle.css')}}"/>
+    {% assets 'calendar_css' %}
+    <link rel="stylesheet" type="text/css" href="{{ASSET_URL}}"/>
+    {% endassets %}
     <script type="text/javascript" src="{{url_for('static', filename='jquery-3.3.1.min.js')}}"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='Scripts')}}"></script>
-    <script type="text/javascript">{% include 'Scripts_with_jinja2' %}</script>
+    <script type="text/javascript">{% include 'main.js' %}</script>
 </head>
 
 <body>

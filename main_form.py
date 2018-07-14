@@ -4,15 +4,20 @@ from re import findall
 from datetime import datetime, date
 from locale import setlocale, LC_ALL
 from flask import Flask, render_template, request
+from flask_assets import Bundle, Environment
 import utils
 import diary_database
 
 # App config.
-DEBUG = True
 APP = Flask(__name__)
-APP.config.from_object(__name__)
-APP.config['SECRET_KEY'] = 'NotTellAnyone'
+APP.config.from_pyfile('config.py')
 setlocale(LC_ALL, '')
+
+CSS = Bundle('CalendarStyle.css', output='gen/main.css', filters='cssmin')
+JS = Bundle('Scripts', '../templates/Scripts_with_jinja2', output='../templates/main.js', filters='jsmin')
+ASSETS = Environment(APP)
+ASSETS.register('calendar_css', CSS)
+ASSETS.register('scripts_js', JS)
 
 
 @APP.template_filter('regexp_split')
