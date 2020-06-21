@@ -1,0 +1,29 @@
+{% extends "public/MainPage.html" %}
+{% block CalendarForDiary %}
+    {% if IsToday %}
+        {{ calendar.formatmonth(calendar.today_year, calendar.today_month)|safe }}
+    {% else %}
+        {{ calendar.formatmonth(calendar.year, calendar.month)|safe }}
+    {% endif %}
+{% endblock %}
+{% block initial_state %}
+    {% for i in range(24) %}
+        <tr class="scrolling_table">
+            <td class="empty">{{ i }}:00-{{ i + 1 }}:00</td>
+            <td class="scrolling">
+                {% for item in calendar.event_data %}
+                    {% set sp = item[1]|regexp_split %}
+                    {% if sp[0] == calendar.year|string %}
+                        {% if sp[1] == calendar.month|string %}
+                            {% if sp[2] == calendar.day|string %}
+                                {% if sp[3] == '0' + i|string %}
+                                    <div class="for_event_lines">{{ item[0] }}<br>{{ i }}:00-{{ i + 1 }}:00</div>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
